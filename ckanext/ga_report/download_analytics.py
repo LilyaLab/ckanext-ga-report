@@ -210,7 +210,7 @@ class DownloadAnalytics(object):
 
         packages = []
         log.info("There are %d results" % results['totalResults'])
-<<<<<<< HEAD
+
         if results['totalResults'] > 0:
             for entry in results.get('rows'):
                 (loc, pageviews, visits) = entry
@@ -223,20 +223,6 @@ class DownloadAnalytics(object):
                     # /403.html?page=/about&from=http://data.gov.uk/publisher/planning-inspectorate
                     continue
                 packages.append((url, pageviews, visits,))  # Temporary hack
-=======
-	if results['totalResults'] > 0:
-          for entry in results.get('rows'):
-            (loc,pageviews,visits) = entry
-            #url = _normalize_url('http:/' + loc) # strips off domain e.g. www.data.gov.uk or data.gov.uk
-            url = loc
-	    #print url
-            if not url.startswith('/data/dataset/') and not url.startswith('/data/organization/'):
-                # filter out strays like:
-                # /data/user/login?came_from=http://data.gov.uk/dataset/os-code-point-open
-                # /403.html?page=/about&from=http://data.gov.uk/publisher/planning-inspectorate
-                continue
-            packages.append( (url, pageviews, visits,) ) # Temporary hack
->>>>>>> e269093499c24eefbde53eafab39ad9d07f6e0a9
         return dict(url=packages)
 
     def store(self, period_name, period_complete_day, data):
@@ -513,7 +499,7 @@ class DownloadAnalytics(object):
                         else:
                             resources_not_matched.append(url)
                             continue
->>>>>>> e269093499c24eefbde53eafab39ad9d07f6e0a9
+
             if resources_not_matched:
                     log.debug('Could not match %i or %i resource URLs to datasets. e.g. %r',
                               len(resources_not_matched), progress_total, resources_not_matched[:3])
