@@ -8,15 +8,16 @@
   <py:def function="page_title">Usage by Dataset</py:def>
 
   <py:def function="optional_head">
-    <link rel="stylesheet" type="text/css" href="/scripts/vendor/rickshaw.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/ga_report.css?1"/>
-    <script type="text/javascript" src="/scripts/modernizr-2.6.2.custom.js"></script>
-    <script type="text/javascript" src="/scripts/ckanext_ga_reports.js?1"></script>
-    <script type="text/javascript" src="/scripts/vendor/jquery.sparkline.modified.js"></script>
-    <script type="text/javascript" src="/scripts/rickshaw_ie7_shim.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/d3.v2.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/d3.layout.min.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/rickshaw.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/data/scripts/vendor/rickshaw.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/data/css/ga_report.css?1"/>
+    <script type="text/javascript" src="/data/scripts/modernizr-2.6.2.custom.js"></script>
+    <script type="text/javascript" src="/data/scripts/ckanext_ga_reports.js?1"></script>
+    <script type="text/javascript" src="/data/scripts/vendor/jquery.sparkline.modified.js"></script>
+    <script type="text/javascript" src="/data/scripts/rickshaw_ie7_shim.js"></script>
+    <script type="text/javascript" src="/data/scripts/vendor/d3.v2.js"></script>
+    <script type="text/javascript" src="/data/scripts/vendor/d3.layout.min.js"></script>
+    <script type="text/javascript" src="/data/scripts/vendor/rickshaw.min.js"></script>
+    <script type="text/javascript" src="/data/scripts/custom.js"></script>
   </py:def>
 
 
@@ -33,14 +34,20 @@
 
   <div py:match="content">
 
-    <py:with vars="download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='dataset_csv',id=c.publisher_name or 'all',month=c.month or 'all')">
-      <a class="btn button btn-primary btn-sm pull-right" href="${download_link}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
-    </py:with>
+    
     <h1>Site Usage
         <small py:if="c.publisher">${c.publisher.title}</small>
         <small py:if="not c.publisher">All datasets</small>
     </h1>
 
+
+
+    <py:with vars="download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='dataset_csv',id=c.publisher_name or 'all',month=c.month or 'all')">
+      <a class="btn button btn-primary btn-sm " href="${download_link}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
+    </py:with>
+
+
+    
     <div class="row" style="background: #fff;">
       <div class="col-md-8">
         <div class="whitebox">
@@ -73,11 +80,12 @@
    </form>
    <div class="alert alert-info" py:if="not c.top_packages">No page views in this period.</div>
    <py:if test="c.top_packages">
-     <table class="ga-reports-table table table-condensed table-bordered">
+     <div class='better-viewed' style="padding: 10px; text-align: center;">Best viewed in landscape</div> <table class="ga-reports-table table table-condensed table-bordered">
        <tr>
          <th>Dataset</th>
          <th>Views</th>
          <th>Downloads</th>
+         <th>Conversion Rate</th>
        </tr>
        <py:for each="package, views, visits,downloads in c.top_packages">
          <tr>
@@ -85,8 +93,10 @@
              ${h.link_to(package.title or package.name, h.url_for(controller='package', action='read', id=package.name))}
            </td>
            <td class="td-numeric">${views}</td>
-           <td class="td-numeric">${downloads}</td> 
-        </tr>
+           <td class="td-numeric">${downloads}</td>
+           <td class="td-numeric" py:if="downloads == 0">0%</td>
+           <td class="td-numeric" py:if="downloads > 0">${round((float(downloads)/float(views))*100,2)}%</td>
+         </tr>
       </py:for>
     </table>
   </py:if>

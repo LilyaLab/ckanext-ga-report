@@ -120,13 +120,13 @@ class DownloadAnalytics(object):
                 accountName = config.get('googleanalytics.account')
 
                 log.info('Downloading analytics for dataset views')
-                data = self.download(start_date, end_date, '~^/dataset/[a-z0-9-_]+')
+                data = self.download(start_date, end_date, '~^/data/dataset/[a-z0-9-_]+')
 
                 log.info('Storing dataset views (%i rows)', len(data.get('url')))
                 self.store(period_name, period_complete_day, data, )
 
                 log.info('Downloading analytics for publisher views')
-                data = self.download(start_date, end_date, '~^/organization/[a-z0-9-_]+')
+                data = self.download(start_date, end_date, '~^/data/organization/[a-z0-9-_]+')
 
                 log.info('Storing publisher views (%i rows)', len(data.get('url')))
                 self.store(period_name, period_complete_day, data, )
@@ -210,6 +210,7 @@ class DownloadAnalytics(object):
 
         packages = []
         log.info("There are %d results" % results['totalResults'])
+<<<<<<< HEAD
         if results['totalResults'] > 0:
             for entry in results.get('rows'):
                 (loc, pageviews, visits) = entry
@@ -222,6 +223,20 @@ class DownloadAnalytics(object):
                     # /403.html?page=/about&from=http://data.gov.uk/publisher/planning-inspectorate
                     continue
                 packages.append((url, pageviews, visits,))  # Temporary hack
+=======
+	if results['totalResults'] > 0:
+          for entry in results.get('rows'):
+            (loc,pageviews,visits) = entry
+            #url = _normalize_url('http:/' + loc) # strips off domain e.g. www.data.gov.uk or data.gov.uk
+            url = loc
+	    #print url
+            if not url.startswith('/data/dataset/') and not url.startswith('/data/organization/'):
+                # filter out strays like:
+                # /data/user/login?came_from=http://data.gov.uk/dataset/os-code-point-open
+                # /403.html?page=/about&from=http://data.gov.uk/publisher/planning-inspectorate
+                continue
+            packages.append( (url, pageviews, visits,) ) # Temporary hack
+>>>>>>> e269093499c24eefbde53eafab39ad9d07f6e0a9
         return dict(url=packages)
 
     def store(self, period_name, period_complete_day, data):
@@ -409,6 +424,7 @@ class DownloadAnalytics(object):
         import ckan.model as model
 
         data = {}
+        data_org = {}
 
         try:
             # Because of issues of invalid responses, we are going to make these requests
@@ -421,7 +437,7 @@ class DownloadAnalytics(object):
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
 
-            args["filters"] = 'ga:eventAction==Download'
+            args["filters"] = 'ga:eventAction==download,ga:eventAction==internal,ga:eventAction==outbound'
             args["dimensions"] = "ga:eventLabel"
             args["metrics"] = "ga:totalEvents"
             args["alt"] = "json"
@@ -446,60 +462,67 @@ class DownloadAnalytics(object):
                 progress_count += 1
                 if progress_count % 100 == 0:
                     log.debug('.. %d/%d done so far', progress_count, progress_total)
+                if 'linktext=download' in result[0] or 'linktext=order resource' in result[0] or 'linktext=view data tool' in result[0]:
+                    linkhref = re.search('linkhref(=.*data.vic.gov.au|=.*links.com.au|=)(.*?)&linkdivid',result[0].strip())
+                    if linkhref:
+                        url = linkhref.group(2)
 
-                url = urllib.unquote(result[0].strip())
+                        # Get package id associated with the resource that has this URL.
+                        q = model.Session.query(model.Resource)
+                        if cached:
+                            r = q.filter(model.Resource.cache_url.ilike("%%%s%%" % url)).first()
+                        else:
+                            r = q.filter(model.Resource.url.ilike("%%%s%%" % url)).first()
 
-                # Get package id associated with the resource that has this URL.
-                q = model.Session.query(model.Resource)
-                if cached:
-                    r = q.filter(model.ResourceRevision.cache_url.like("%s%%" % url)).first()
-                else:
-                    r = q.filter(model.ResourceRevision.url.like("%s%%" % url)).first()
+                        # new style internal download links
+                        if re.search('(?:\/resource\/)(.*)(?:\/download\/)', url):
+                            resource_id = re.search('(?:\/resource\/)(.*)(?:\/download\/)', url)
+                            r = q.filter(model.Resource.id == resource_id.group(1)).first()
+                            if not r:
+                                filename = re.search('download\/(.*)', url)
+                                if filename:
+                                    sql = "SELECT distinct id FROM public.resource t " \
+                                          "WHERE url ilike '%" + filename.group(1) + "%' " \
+                                                                                     "UNION SELECT distinct id FROM public.resource_revision t " \
+                                                                                     "WHERE url ilike '%" + filename.group(
+                                        1) + "%'"
+                                    res = model.Session.execute(sql).first()
+                                    if res:
+                                        resource_id = res[0]
+                                        r = q.filter(model.Resource.id == resource_id).first()
+                            if not r:
+                                filename = re.search('(\w+\.\w+$)', url)
+                                if filename:
+                                    sql = "SELECT distinct id FROM public.resource_revision t " \
+                                          "WHERE url ilike '%" + filename.group(1) + "%' " \
+                                                                                     "UNION SELECT distinct id FROM public.resource_revision t " \
+                                                                                     "WHERE url ilike '%" + filename.group(
+                                        1) + "%'"
+                                    res = model.Session.execute(sql).first()
+                                    if res:
+                                        resource_id = res[0]
+                                        r = q.filter(model.Resource.id == resource_id).first()
 
-                # new style internal download links
-                if re.search('(?:\/resource\/)(.*)(?:\/download\/)', url):
-                    resource_id = re.search('(?:\/resource\/)(.*)(?:\/download\/)', url)
-                    r = q.filter(model.Resource.id == resource_id.group(1)).first()
-                    if not r:
-                        filename = re.search('download\/(.*)', url)
-                        if filename:
-                            sql = "SELECT distinct id FROM public.resource t " \
-                                  "WHERE url ilike '%" + filename.group(1) + "%' " \
-                                    "UNION SELECT distinct id FROM public.resource_revision t " \
-                                    "WHERE url ilike '%" + filename.group(
-                                1) + "%'"
-                            res = model.Session.execute(sql).first()
-                            if res:
-                                resource_id = res[0]
-                                r = q.filter(model.Resource.id == resource_id).first()
-                    if not r:
-                        filename = re.search('(\w+\.\w+$)', url)
-                        if filename:
-                            sql = "SELECT distinct id FROM public.resource_revision t " \
-                                  "WHERE url ilike '%" + filename.group(1) + "%' " \
-                                    "UNION SELECT distinct id FROM public.resource_revision t " \
-                                    "WHERE url ilike '%" + filename.group(
-                                1) + "%'"
-                            res = model.Session.execute(sql).first()
-                            if res:
-                                resource_id = res[0]
-                                r = q.filter(model.Resource.id == resource_id).first()
+                        package_name = r.resource_group.package.name if r else ""
 
-                package_name = r.resource_group.package.name if r else ""
-
-                if package_name:
-                    data[package_name] = data.get(package_name, 0) + int(result[1])
-                else:
-                    resources_not_matched.append(url)
-                    continue
+                        if package_name:
+                            data[package_name] = data.get(package_name, 0) + int(result[1])
+                            if r.resource_group.package.owner_org:
+                                owner_org = model.Group.get(r.resource_group.package.owner_org).name
+                                data_org[owner_org] = data_org.get(owner_org, 0) + int(result[1])
+                        else:
+                            resources_not_matched.append(url)
+                            continue
+>>>>>>> e269093499c24eefbde53eafab39ad9d07f6e0a9
             if resources_not_matched:
-                log.debug('Could not match %i or %i resource URLs to datasets. e.g. %r',
-                          len(resources_not_matched), progress_total, resources_not_matched[:3])
+                    log.debug('Could not match %i or %i resource URLs to datasets. e.g. %r',
+                              len(resources_not_matched), progress_total, resources_not_matched[:3])
 
         log.info('Associating downloads of resource URLs with their respective datasets')
         process_result_data(results.get('rows'))
 
         ga_model.update_sitewide_stats(period_name, "Downloads", data, period_complete_day)
+        ga_model.update_sitewide_stats(period_name, "Downloads by Organisation", data_org, period_complete_day)
 
     def _social_stats(self, start_date, end_date, period_name, period_complete_day):
         """ Finds out which social sites people are referred from """

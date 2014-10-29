@@ -8,6 +8,16 @@
   <py:def function="page_title">Site usage</py:def>
 
   <py:def function="optional_head">
+      <link rel="stylesheet" type="text/css" href="/data/scripts/vendor/rickshaw.min.css"/>
+      <link rel="stylesheet" type="text/css" href="/data/css/ga_report.css?1"/>
+      <script type="text/javascript" src="/data/scripts/modernizr-2.6.2.custom.js"></script>
+      <script type="text/javascript" src="/data/scripts/ckanext_ga_reports.js?1"></script>
+      <script type="text/javascript" src="/data/scripts/vendor/jquery.sparkline.modified.js"></script>
+      <script type="text/javascript" src="/data/scripts/rickshaw_ie7_shim.js"></script>
+      <script type="text/javascript" src="/data/scripts/vendor/d3.v2.js"></script>
+      <script type="text/javascript" src="/data/scripts/vendor/d3.layout.min.js"></script>
+      <script type="text/javascript" src="/data/scripts/vendor/rickshaw.min.js"></script>
+
   </py:def>
 
  <py:match path="breadcrumbs">
@@ -18,22 +28,9 @@
   <div py:match="content">
     <div class="row">
       <div class="col-sm-7 col-md-8 col-lg-9">
-        <py:with vars="download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all')">
-          <a class="btn button btn-primary btn-sm pull-right" href="${download_link}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
-        </py:with>
         <h1>Site Usage</h1>
       </div>
-      <div class="col-sm-5 col-md-4 col-lg-3">
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Jump To...</strong></div>
-          <div class="panel-body">
-            <ul>
-              <li><a href="/site-usage/publisher">Publisher Usage Statistics</a></li>
-              <li><a href="/site-usage/dataset">Dataset Usage Statistics</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+
     </div>
 
     <div class="row" style="background: #fff;">
@@ -51,7 +48,7 @@
                   </ul>
               </li>
               <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operating Systems
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">OS
                       <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                       <li><a href="#os" data-hash="os" data-toggle="tab">Operating Systems</a></li>
@@ -69,11 +66,19 @@
               <li><a href="#languages" data-hash="languages" data-toggle="tab">Languages</a></li>
               <li><a href="#country" data-hash="country" data-toggle="tab">Country</a></li>
             </ul>
+            <div>
+        <py:with vars="download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all')">
+          <a class="btn button btn-primary btn-sm " href="${download_link}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
+        </py:with>
+      </div>
             <div class="tab-content">
+              <div class='better-viewed' style="padding: 10px; text-align: center;">Best viewed in landscape</div>
               <div class="tab-pane active" id="totals">
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='totals' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                    <table class="ga-reports-table table table-condensed table-bordered table-striped">
                      <tr>
@@ -94,6 +99,7 @@
                       </py:for>
                      </table>
               </div>
+              
                <div class="tab-pane" id="browsers_versions">
                    ${rickshaw_graph(c.browser_versions_graph,'browser-versions',mode='stack')}
                    <hr/>
@@ -101,6 +107,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='browsers_versions' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.browser_versions)}
@@ -111,6 +119,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='browsers_names' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.browsers)}
@@ -121,6 +131,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='os' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.os)}
@@ -131,6 +143,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='os_versions' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.os_versions)}
@@ -140,6 +154,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='social_referrals_totals' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                   ${social_table(c.social_referrer_totals)}
               </div>
@@ -150,6 +166,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='social_networks' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.social_networks, 'Visits')}
@@ -160,6 +178,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='languages' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.languages)}
@@ -170,6 +190,8 @@
                    <form class="form-inline" action="${h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      ${month_selector(c.month, c.months, c.day)}
+                     <input type='hidden' name='current' class='tab-holder-hidden' value='country' />
+                     <input class="btn button btn-primary btn-xs" type='submit' value="Update"/>
                    </form>
                 <hr/>
                    ${stat_table(c.country)}
@@ -179,6 +201,20 @@
        </div>
       </div>
     </div>
+
+
+    <div class="col-sm-5 col-md-4 col-lg-3">
+        <div class="panel panel-default">
+          <div class="panel-heading"><strong>Jump To...</strong></div>
+          <div class="panel-body">
+            <ul>
+              <li><a href="/data/site-usage/publisher">Publisher Usage Statistics</a></li>
+              <li><a href="/data/site-usage/dataset">Dataset Usage Statistics</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
 
   </div>
 
@@ -190,9 +226,17 @@
         CKAN.GA_Reports.bind_sidebar();
         CKAN.GA_Reports.bind_month_selector();
       });
+      $('.site-usage li:not(.dropdown) a').on('click', function(){
+          $('.site-usage li.active').toggleClass('active')
+          $(this).parent().toggleClass('active')
+          $('.dropdown:hover').toggleClass('active')
+      })
+      $('.dropdown > a').on('click', function(){return false;})
     </script>
   </py:def>
-
+  <py:def function="check_current_tab">
+    gaReportCheckCurrentTab();
+  </py:def>
   <xi:include href="layout.html" />
 </html>
 

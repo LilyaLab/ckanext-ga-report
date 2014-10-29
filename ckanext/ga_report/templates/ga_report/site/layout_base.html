@@ -7,17 +7,16 @@
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       > <!--<![endif]-->
-<xi:include href="../../_util.html" />
+<xi:include href="_util.html" />
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-  <title>${page_title()} - ${g.site_title}</title>
+  <title>${page_title()} | Victorian Government Data Directory</title>
   <meta name="description" content="" />
   <meta name="author" content="" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="${h.url_for_static(g.favicon)}" />
 
   <py:choose>
   <py:when test="defined('optional_feed')">
@@ -34,119 +33,74 @@
   <link rel="stylesheet" href="${h.url_for_static('/css/chosen.css')}" type="text/css" />
   <link rel="stylesheet" href="${h.url_for_static('/css/style.css?v=2')}" />
   ${jsConditionalForIe(9, '&lt;script type="text/javascript" src="' + h.url_for_static('/scripts/vendor/html5shiv/html5.js') + '"&gt;&lt;/script&gt;')}
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/scripts/vendor/rickshaw.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/ga_report.css?1"/>
-    <script type="text/javascript" src="/scripts/modernizr-2.6.2.custom.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/jquery.sparkline.modified.js"></script>
-    <script type="text/javascript" src="/scripts/ckanext_ga_reports.js?1"></script>
-    <script type="text/javascript" src="/scripts/rickshaw_ie7_shim.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/d3.v2.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/d3.layout.min.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/rickshaw.min.js"></script>
-<style>
-#pre-content #breadcrumbs {
-    padding-left: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 0;
-    list-style-type: none;
-    color: #ccc
-}
+    <script src="${h.url_for_static('/scripts/vendor/jquery/1.7.1/jquery.js')}"></script>
 
-#pre-content #breadcrumbs li {
-    color: #999;
-    display: inline-block;
-    zoom: 1;
-    *display: inline;
-    margin-right: 8px
-}
-
-#pre-content #breadcrumbs li:after {
-    content: '/';
-    display: inline-block;
-    zoom: 1;
-    *display: inline;
-    margin-left: 12px
-}
-
-#pre-content #breadcrumbs li:last-child:after {
-    display: none
-}
-
-#pre-content #breadcrumbs a {
-    color: #999
-}
-
-#pre-content #breadcrumbs a:hover {
-    color: #000;
-    text-decoration: none
-}
-
-#pre-content #breadcrumbs .spacer {
-    color: #ccc
-}
-</style>
   <py:if test="defined('optional_head')">
     ${optional_head()}
   </py:if>
 
   ${h.literal(getattr(g, 'template_head_end', ''))}
+  <link rel="stylesheet" href="/styles/fontawesome.css"/>
+  <link rel="stylesheet" href="/styles/select2.css"/>
+  <link rel="stylesheet" href="${h.include_resource('ckanext-datavic/styles/main.css')}"/>
+  <script type="text/javascript" src="/data/scripts/custom.js"></script>
+  <link rel="stylesheet" href="/styles/new.css"/>
+  <link rel="shortcut icon" href="/sites/default/files/favicon.ico" type="image/vnd.microsoft.icon"/>
 </head>
 
 <body class="${request.environ.get('pylons.routes_dict', {}).get('action')}
              ${request.environ.get('pylons.routes_dict', {}).get('controller').split(':')[-1]}
              ${defined('body_class') and body_class()}
-  ">
+  "><div id="skip-link"> 
+    <a tabindex="0" href="#main-content" class="element-invisible element-focusable">Skip to main content</a> 
+  </div> 
+<div id='data-wrapper'>
+    <header class="navbar navbar-static-top masthead">
+        <div class="container header-area">
+            <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar collapsed" type="button">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="logo-holder">
 
-  <div id="wrap">
-    <div class="header outer">
-      <header class="container">
-        <div class="menu account">
-          <span class="ckan-logged-in" style="display: none;">
-            <a href="${h.url_for(controller='user',action='me')}">${h.gravatar((c.userobj.email_hash if c and c.userobj else ''),size=20)}${c.user}</a>
-            <a href="${h.url_for('/user/_logout')}">Logout</a>
-          </span>
-          <span class="ckan-logged-out">
-            <a href="${h.url_for(controller='user',action='login')}">Login</a>
-            <a href="${h.url_for(controller='user',action='register')}">Register</a>
-          </span>
+              <a href="/home">
+                <img src="/images/logo-new-hq.png" alt="data.vic.gov.au"  width="138" height="54"></img>
+              </a>
+              <a href="http://www.vic.gov.au/">
+                <img src="/images/victoria-logo-small.png" alt="State Government Victoria"  width="62" height="36"></img>
+              </a>
+            </div>
+            <div class="nav-collapse collapse">
+
+
+                <nav class="section navigation">
+                <ul class="nav nav-pills">
+                    
+                    <li><a href="/" class="active">HOME</a></li>
+                    <li ><a href="/data/dataset" title="">DATA</a></li>
+                    <li><a href="/suggest_a_dataset" title="">SUGGEST DATASET</a></li>
+                    <li><a href="/showcase" title="">SHOWCASE</a></li>
+                    <li ><a href="http://nationalmap.gov.au/vic" id="external_menu_map">MAP</a><span class="external_link_span">Go to the external National Map<br /> Service Website</span></li>
+                    <li id='blog-nav'><a href="/blogs" title="">BLOG</a></li>
+                    <li id='stats-nav' class="active"><a href="/data/stats" title="">STATS</a></li>
+                </ul>
+            </nav>
+            </div>
         </div>
-        <a href="${h.url('home')}">
-          <img width="196" src="${h.url_for_static(g.site_logo)}" alt="${g.site_title} Logo" title="${g.site_title} Logo" id="logo" />
-        </a>
-        <div id="site-name">
-<!--          <a href="${h.url('home')}">${g.site_title} &mdash; ${g.site_description}</a>-->
-        </div>
-        <div class="menu">
-<!--          <span id="menusearch">
-            <form action="${h.url(controller='package', action='search')}" method="GET">
-              <input name="q" value="${c.q if hasattr(c, 'q') else ''}" class="search" placeholder="${_('Find datasets')}" />
-            </form>
-          </span>
-          <div id="mainmenu">
-            <span py:if="h.check_access('package_create')">${h.nav_link(_('Add a dataset'), controller='package', action='new')}</span>
-            ${h.nav_link(_('Search'), controller='package', action='search', highlight_actions = 'new index')}
-            ${h.nav_link(_('Groups'), named_route='%s_index' % h.default_group_type())}
-            ${h.nav_link(_('About'), controller='home', action='about')}
-          </div>-->
-        </div>
-      </header>
-    </div>
- <div id="pre-content">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <ul id="breadcrumbs">
-            <li><a href="/"><i class="icon-home"></i></a></li>
-            <breadcrumbs>
-            </breadcrumbs>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+
+        <form class="section site-search simple-input" action="/data/dataset" method="get">
+            <div class="field">
+                <label for="field-sitewide-search">
+                    Search Datasets
+                </label>
+                <input id="field-sitewide-search" type="text" name="q" placeholder="Search for data..." title="Enter the terms you wish to search for."/>
+                <button class="btn-search" type="submit" title="Search button">
+                    <i class="icon-search"></i>
+                </button>
+            </div>
+        </form>
+    </header>
 
     <py:with vars="messages = list(h.flash.pop_messages())">
     <div class="flash-messages container">
@@ -156,10 +110,14 @@
     </div>
     </py:with>
 
-    <div id="main" class="container" role="main">
+
+
+
+<div role="main">
+    <div id="main" class="container" >
       <h1 py:if="defined('page_heading')" class="page_heading">
         <img py:if="defined('page_logo')" id="page-logo" src="${page_logo()}" alt="Page Logo" />
-<!--        ${page_heading()} -->
+        ${page_heading()}
       </h1>
       <div class="row">
         <div class="span12">
@@ -168,9 +126,29 @@
           </div>
         </div>
       </div>
+<div class="toolba">
 
-      <div class="row">
-        <div class="span9 content-outer">
+     <ol class="breadcrumb">
+        <li class="home"><a href="/" title="Home" name="main-content"><i class="icon-home"></i></a>
+        </li> 
+        <li> / </li>
+        <li class="active"> <a href="/data/site-usage" title="Statistics">Statistics</a></li>
+    </ol>
+ <div id='sr-home' style="
+                                      position: absolute;
+                                      width: 20px;
+                                      height: 20px;
+                                      opacity: 0;
+                                      overflow: hidden;
+                                      cursor: pointer;
+                                      top: 10px;
+                                      " onclick=" window.location = '/' ">
+                                      Home
+                  </div>
+                </div>
+      <div class="row wrapper">
+
+        <div class="primary span9">
           <div id="content">
             <py:if test="defined('content')">
               ${content()}
@@ -180,119 +158,116 @@
             </content>
           </div> <!-- /content -->
         </div>
-        <div class="span3 sidebar-outer">
-          <div id="sidebar">
-      <div class="col-md-4">
-        <div class="whitebox">
-          <strong>Graph Legend</strong>
-          <div id="graph-legend-container">
-            <div style="display: none;" id="legend_none">(No graph is loaded)</div>
-          </div>
-        </div>
-      </div>
+        <section class=' module-narrow'>
+          <aside class="secondary span3">
+            <div class="aside-image">
+      <img src="/images/img15.png" alt="" width="97" height="97"></img>
+    </div>
+              <div >
+                  <div class="col-md-4">
+                      <div class="whitebox">
+                          <h2 class="module-heading">Graph Legend</h2>
+                          <div id="graph-legend-container">
+                              <div style="display: none;" id="legend_none">(No graph is loaded)</div>
+                          </div>
+                      </div>
+                  </div>
 
-            <ul class="widget-list">
-              <py:if test="defined('primary_sidebar_extras')">
-                ${primary_sidebar_extras()}
-              </py:if>
-              <primarysidebar>
-                <!-- Primary Side Bar Goes Here -->
-              </primarysidebar>
-            </ul>
-          </div>
-        </div>
+                  <ul class="widget-list">
+                      <py:if test="defined('primary_sidebar_extras')">
+                          ${primary_sidebar_extras()}
+                      </py:if>
+                      <primarysidebar>
+                          <!-- Primary Side Bar Goes Here -->
+                      </primarysidebar>
+                  </ul>
+              </div>
+          </aside>
+        </section>
       </div>
     </div>
     <br/><br/>
-  </div>
-  <div class="clearfix"></div>
-  <div class="footer outer">
-    <footer class="container">
-      <div class="row">
-<!--        <div class="span3">
-          <h3 class="widget-title">About ${g.site_title}</h3>
-          <div class="textwidget">
-            <ul>
-                <li>${h.link_to(_('About'), h.url_for(controller='home', action='about'))}</li>
-              <li>
-                <a href="http://twitter.com/ckanproject">Twitter @ckanproject</a>
-              </li>
-                <li>${h.link_to(_('API'), h.url_for(controller='api', action='get_api', ver=1))}</li>
-                <li>${h.link_to(_('API Docs'), 'http://docs.ckan.org/en/latest/api.html')}</li>
-              <li>
-                <a href="http://ckan.org/contact/">Contact Us</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/privacy-policy/">Privacy Policy</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="span3">
-          <h3 class="widget-title">Sections</h3>
-          <div class="textwidget">
-            <ul>
-              <li>
-                <a href="${h.url(controller='user', action='index')}">
-                  Users
-                </a>
-              </li>
-              <li>
-                <a href="${h.url(controller='tag', action='index')}">
-                  Tags
-                </a>
-              </li>
-              <li py:if="'stats' in config.get('ckan.plugins','').split(' ')">
-                <a href="${h.url('stats')}">
-                  Statistics
-                </a>
-              </li>
-              <li>
-                <a href="${h.url(controller='revision', action='index')}">
-                  Revisions
-                </a>
-              </li>
-              <li>
-                <a href="${h.url_for('ckanadmin_index')}">
-                  Site Admin
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="span3">
-          <h3 class="widget-title">Languages</h3>
-          <div class="textwidget">
-            <ul>
-<?python
-  current_url = request.environ['CKAN_CURRENT_URL']
-?>
-              <li py:for="locale in h.get_available_locales()">
-              <a href="${h.url(current_url, locale=str(locale))}">
-                  ${locale.display_name or locale.english_name}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>-->
-        <div class="span12">
-          <p id="credits">
-            &copy; 2012-2014
-            <img src="//assets.okfn.org/images/logo/okf_logo_white_and_green_tiny.png" id="footer-okf-logo" />
-            <a href="http://okfn.org/">Open Knowledge Foundation</a>
-            Licensed under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>
-            <a href="http://opendefinition.org/"><img alt="This Content and Data is Open" src="//assets.okfn.org/images/ok_buttons/od_80x15_blue.png" style="border: none;"/></a>
+</div>
+    <div class="clearfix"></div>
 
-            <br/><br/>
-            Powered by <a href="http://ckan.org">CKAN</a> v${c.__version__}.<br/>
-          </p>
-        </div>
-      </div>
-    </footer>
-  </div> <!-- eo #container -->
+
+
+
+
+
+  <footer class="site-footer">
+  <div class="container">
+    
+        <nav class="footer-links">            
+            <div class="row">
+                <div class="span12">
+                    <ul class="list">
+                        <li><a href="/about-us">About Us</a>
+                        </li>
+                        <li><a href="/terms-of-use">Terms of Use</a>
+                        </li>
+                        <li><a href="/privacy">Privacy</a>
+                        </li>
+                        <li><a href="/copyright-and-attribution">Copyright and Attribution</a>
+                        </li>
+                        <li><a href="/policy-and-standards">Policy and Standards</a>
+                        </li>
+                        <li><a href="/accessibility">Accessibility</a>
+                        </li>
+                        <li><a href="/contact">Contact</a>
+                        </li>
+                    </ul>
+                     <div id="items-left">
+                            <div class="item-list">
+                                <ul class="footer-mobile">
+                                    <li class="first"><a href="/about-us">About Us</a>
+                                    </li>
+                                    <li><a href="/terms-of-use">Terms of Use</a>
+                                    </li>
+                                    <li><a href="/privacy">Privacy</a>
+                                    </li>
+                                    <li class="last"><a href="/copyright-and-attribution">Copyright and Attribution</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item-list">
+                            <ul class="footer-mobile">
+                                <li class="first"><a href="/policy-and-standards">Policy and Standards</a>
+                                </li>
+                                <li><a href="/accessibility">Accessibility</a>
+                                </li>
+                                <li class="last"><a href="/contact">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="span10">
+                    <div class="powered">
+                        <span>Powered by</span>
+                        <a href="http://ckan.org/">
+                            <img src="/images/ckan-logo-footer-black.png" alt="CKAN" width="68" height="20" />
+                        </a>
+                    </div>
+                </div>
+                <div class="span2">
+                    <a href="http://www.vic.gov.au/">
+                        <img src="/images/victoria-logo.png" alt="State Government Victoria" width="103" height="59" class="alignright" />
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+  </div>  
+</footer>
+ <!-- eo #container -->
   
   <div style="display:none;" id="scripts">
-  <!--<script src="${h.url_for_static('/scripts/vendor/jquery/1.7.1/jquery.js')}"></script>-->
+
   <script type="text/javascript" src="${h.url_for_static('/scripts/vendor/json2.js')}"></script>
   <script type="text/javascript" src="${h.url_for_static('/scripts/vendor/jquery.tmpl/beta1/jquery.tmpl.js')}"></script>
   <script type="text/javascript" src="${h.url_for_static('/scripts/vendor/jquery.cookie/jquery.cookie.min.js')}"></script>
@@ -308,12 +283,14 @@
   <script type="text/javascript" src="${h.url_for_static('/scripts/vendor/jquery.fileupload/20110801/jquery.fileupload.js')}"></script>
 
   <!-- Translated js strings live inside an html template. -->
-  <xi:include href="../../js_strings.html" />
+  <xi:include href="js_strings.html" />
   <!-- finally our application js that sets everything up-->
   <script type="text/javascript" src="${h.url_for_static('/scripts/application.js?lang=${c.locale}')}"></script>
   <script type="text/javascript" src="${h.url_for_static('/scripts/templates.js')}"></script>
 
   <script type="text/javascript">
+
+
     CKAN.plugins = [
       // Declare js array from Python string
       ${['\'%s\', '%s  for s in config.get('ckan.plugins','').split(' ')]}
@@ -328,15 +305,39 @@
     CKAN.SITE_URL = CKAN.SITE_URL.replace(/\/$/, '');
     CKAN.SITE_URL_NO_LOCALE = CKAN.SITE_URL_NO_LOCALE.replace(/\/$/, '');
     $(document).ready(function() {
+       
+
         var ckan_user = '${c.user}';
         if (ckan_user) {
             $(".ckan-logged-out").hide();
             $(".ckan-logged-in").show();
         }
-        $('input[placeholder], textarea[placeholder]').placeholder();
-
+        <py:if test="defined('check_current_tab')">
+          ${check_current_tab()}
+        </py:if>
+          $('input[placeholder], textarea[placeholder]').placeholder();
+       
 		$(".chzn-select").chosen();
     });
+
+    if (document.querySelector('.tabbable .nav.nav-tabs')) document.querySelector('.tabbable .nav.nav-tabs').setAttribute('class', 'add-nav')
+
+    var download = document.querySelector('.btn.button.btn-primary.btn-sm.pull-right')
+    if (download){
+      var href = download.getAttribute('href')
+      download.parentElement.setAttribute('class', 'user-block-holder')
+      var newButton = document.createElement('ul')
+      newButton.style.float = 'right'
+      newButton.setAttribute('class', 'btn-holder')
+      newButton.innerHTML = '<li tabindex="0"><a class="resource-download" href="' + href + '">Download as CSV<i class="icon-arrow-down"></i></a></li>'
+      download.parentElement.insertBefore(newButton, download)
+      download.parentElement.removeChild(download);
+    }
+
+
+   
+
+    
   </script>
 
   <py:if test="h.asbool(config.get('ckan.tracking_enabled', 'false'))">
@@ -349,6 +350,7 @@
   </py:if>
 
 ${h.literal(getattr(g, 'template_footer_end', ''))}
+</div>
 </body>
 </html>
 
