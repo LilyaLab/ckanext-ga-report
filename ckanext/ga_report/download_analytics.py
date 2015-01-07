@@ -475,8 +475,10 @@ class DownloadAnalytics(object):
                                           "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' " \
                                           "UNION SELECT distinct id FROM public.resource_revision t " \
                                           "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%'"
-                                    resource_id = model.Session.execute(sql).first()[0]
-                                    r = q.filter(model.Resource.id == resource_id).first()
+                                    res = model.Session.execute(sql).first()
+                                    if res:
+                                        resource_id = res[0]
+                                        r = q.filter(model.Resource.id == resource_id).first()
                             if not r:
                                 filename = re.search('(\w+\.\w+$)', url)
                                 if filename:
@@ -484,8 +486,10 @@ class DownloadAnalytics(object):
                                           "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' " \
                                           "UNION SELECT distinct id FROM public.resource_revision t " \
                                           "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%'"
-                                    resource_id = model.Session.execute(sql).first()[0]
-                                    r = q.filter(model.Resource.id == resource_id).first()
+                                    res = model.Session.execute(sql).first()
+                                    if res:
+                                        resource_id = res[0]
+                                        r = q.filter(model.Resource.id == resource_id).first()
 
                         package_name = r.resource_group.package.name if r else ""
 
