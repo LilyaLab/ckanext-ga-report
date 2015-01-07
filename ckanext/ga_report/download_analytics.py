@@ -453,7 +453,7 @@ class DownloadAnalytics(object):
                 if progress_count % 100 == 0:
                     log.debug('.. %d/%d done so far', progress_count, progress_total)
                 if 'linktext=download' in result[0] or 'linktext=order resource' in result[0] or 'linktext=view data tool' in result[0]:
-                    linkhref = re.search('linkhref(=.*data.vic.gov.au|=.*links.com.au|=)(.*?)&linkdivid',result[0].strip())
+                    linkhref = re.search('linkhref(=.*data.vic.gov.au|=.*links.com.au|=)(.*?)&linkdiv',result[0].strip())
                     if linkhref:
                         url = linkhref.group(2)
 
@@ -472,9 +472,9 @@ class DownloadAnalytics(object):
                                 filename = re.search('(.files.*)', url)
                                 if filename:
                                     sql = "SELECT distinct id FROM public.resource t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' " \
+                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' " \
                                           "UNION SELECT distinct id FROM public.resource_revision t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%'"
+                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' "
                                     res = model.Session.execute(sql).first()
                                     if res:
                                         resource_id = res[0]
@@ -483,9 +483,9 @@ class DownloadAnalytics(object):
                                 filename = re.search('(\w+\.\w+$)', url)
                                 if filename:
                                     sql = "SELECT distinct id FROM public.resource t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' " \
+                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' " \
                                           "UNION SELECT distinct id FROM public.resource_revision t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%'"
+                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' "
                                     res = model.Session.execute(sql).first()
                                     if res:
                                         resource_id = res[0]
