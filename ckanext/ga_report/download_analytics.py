@@ -472,24 +472,34 @@ class DownloadAnalytics(object):
                                 filename = re.search('(.files.*)', url)
                                 if filename:
                                     sql = "SELECT distinct id FROM public.resource t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' " \
+                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or replace(url,' ','') ilike '%"+filename.group(1).replace(" ","")+"%' or url ilike '%"+filename.group(1)+"%' " \
                                           "UNION SELECT distinct id FROM public.resource_revision t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' "
+                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or replace(url,' ','') ilike '%"+filename.group(1).replace(" ","")+"%' or url ilike '%"+filename.group(1)+"%' "
                                     res = model.Session.execute(sql).first()
                                     if res:
                                         resource_id = res[0]
                                         r = q.filter(model.Resource.id == resource_id).first()
-                            if not r:
-                                filename = re.search('(\w+\.\w+$)', url)
-                                if filename:
-                                    sql = "SELECT distinct id FROM public.resource t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' " \
-                                          "UNION SELECT distinct id FROM public.resource_revision t " \
-                                          "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or url ilike '%"+filename.group(1)+"%' "
-                                    res = model.Session.execute(sql).first()
-                                    if res:
-                                        resource_id = res[0]
-                                        r = q.filter(model.Resource.id == resource_id).first()
+
+                        #external links and finally try to extract filename
+                        if not r:
+                            sql = "SELECT distinct id FROM public.resource t " \
+                                  "WHERE replace(url,'-','') ilike '%"+url+"%' or replace(url,' ','') ilike '%"+url.replace(" ","")+"%' or url ilike '%"+url+"%' " \
+                                  "UNION SELECT distinct id FROM public.resource_revision t " \
+                                  "WHERE replace(url,'-','') ilike '%"+url+"%' or replace(url,' ','') ilike '%"+url.replace(" ","")+"%' or url ilike '%"+url+"%' "
+                            res = model.Session.execute(sql).first()
+                            if res:
+                                resource_id = res[0]
+                                r = q.filter(model.Resource.id == resource_id).first()
+                            filename = re.search('(\w+\.\w+$)', url)
+                            if filename:
+                                sql = "SELECT distinct id FROM public.resource t " \
+                                      "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or replace(url,' ','') ilike '%"+filename.group(1).replace(" ","")+"%' or url ilike '%"+filename.group(1)+"%' " \
+                                      "UNION SELECT distinct id FROM public.resource_revision t " \
+                                      "WHERE replace(url,'-','') ilike '%"+filename.group(1)+"%' or replace(url,' ','') ilike '%"+filename.group(1).replace(" ","")+"%' or url ilike '%"+filename.group(1)+"%' "
+                                res = model.Session.execute(sql).first()
+                                if res:
+                                    resource_id = res[0]
+                                    r = q.filter(model.Resource.id == resource_id).first()
 
                         package_name = r.resource_group.package.name if r else ""
 
