@@ -503,7 +503,7 @@ class DownloadAnalytics(object):
                             continue
             if resources_not_matched:
                     log.debug('Could not match %i or %i resource URLs to datasets. e.g. %r',
-                              len(resources_not_matched), progress_total, resources_not_matched[:3])
+                              len(resources_not_matched), progress_total, resources_not_matched)
 
         log.info('Associating downloads of resource URLs with their respective datasets')
         process_result_data(results.get('rows'))
@@ -683,3 +683,4 @@ class DownloadAnalytics(object):
         for key, value in data.items():
             if value < threshold:
                 del data[key]
+
