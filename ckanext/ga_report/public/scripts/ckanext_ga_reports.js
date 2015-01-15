@@ -65,6 +65,8 @@ CKAN.GA_Reports.render_rickshaw = function( css_name, data, mode, colorscheme ) 
     
     // myLegend.prepend('<h2 class="module-heading">Click on a series below to isolate its graph:</h2>');
     graph.render();
+$('#legend_publishers').show();
+$('#legend_dataset-downloads').show();
 };
 
 CKAN.GA_Reports.bind_sparklines = function() {
