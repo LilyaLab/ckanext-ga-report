@@ -8,6 +8,7 @@ from sqlalchemy.orm import mapper, relation
 from sqlalchemy import func
 
 import ckan.model as model
+import ckan.model.group as group
 from ckan.lib.base import *
 
 log = __import__('logging').getLogger(__name__)
@@ -123,11 +124,12 @@ def _get_package_and_publisher(url):
     dataset_match = re.match('/data/dataset/([^/]+)(/.*)?', url)
     if dataset_match:
         dataset_ref = dataset_match.groups()[0]
-        dataset = model.Package.get(dataset_ref)
+        dataset = model.Session.query(model.PackageRevision).filter(or_(model.PackageRevision.name == dataset_ref,model.PackageRevision.id == dataset_ref)).first()
         if dataset:
-            publisher_groups = dataset.get_groups('organization')
-            if publisher_groups:
-                return dataset_ref,publisher_groups[0].name
+            owner_org = model.Session.query(group.Group).filter(group.Group.id == dataset.owner_org).first()
+            if owner_org:
+                return dataset.name,owner_org.name
+        log.debug('dataset '+dataset_ref+' or owner_org not found')
         return dataset_ref, None
     else:
         publisher_match = re.match('/organization/([^/]+)(/.*)?', url)
