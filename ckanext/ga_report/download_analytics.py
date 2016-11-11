@@ -164,9 +164,9 @@ class DownloadAnalytics(object):
                        filters=query,
                        metrics=metrics,
                        sort=sort,
-                       dimensions="ga:landingPagePath,ga:socialNetwork",
-                       max_results=10000)
+                       dimensions="ga:landingPagePath,ga:socialNetwork")
 
+            args['max-results'] = 10000
             args['start-date'] = start_date
             args['end-date'] = end_date
 
@@ -198,11 +198,12 @@ class DownloadAnalytics(object):
         try:
             args = {}
             args["sort"] = "-ga:pageviews"
-            args["max-results"] = 100000
+            args["max-results"] = 10000
             args["dimensions"] = "ga:pagePath"
             args["start-date"] = start_date
             args["end-date"] = end_date
             args["metrics"] = metrics
+            args["sort"] = sort
             args["ids"] = "ga:" + self.profile_id
             args["filters"] = query
             args["alt"] = "json"
@@ -288,7 +289,7 @@ class DownloadAnalytics(object):
         """ Fetches distinct totals, total pageviews etc """
         try:
             args = {}
-            args["max-results"] = 100000
+            args["max-results"] = 10000
             args["start-date"] = start_date
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
@@ -312,7 +313,7 @@ class DownloadAnalytics(object):
             headers = {'authorization': 'Bearer ' + self.token}
 
             args = {}
-            args["max-results"] = 100000
+            args["max-results"] = 10000
             args["start-date"] = start_date
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
@@ -343,7 +344,7 @@ class DownloadAnalytics(object):
             headers = {'authorization': 'Bearer ' + self.token}
 
             args = {}
-            args["max-results"] = 100000
+            args["max-results"] = 10000
             args["start-date"] = start_date
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
@@ -380,7 +381,7 @@ class DownloadAnalytics(object):
             headers = {'authorization': 'Bearer ' + self.token}
 
             args = {}
-            args["max-results"] = 100000
+            args["max-results"] = 10000
             args["start-date"] = start_date
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
@@ -422,7 +423,7 @@ class DownloadAnalytics(object):
             headers = {'authorization': 'Bearer ' + self.token}
 
             args = {}
-            args["max-results"] = 100000
+            args["max-results"] = 10000
             args["start-date"] = start_date
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
@@ -430,6 +431,7 @@ class DownloadAnalytics(object):
             args["filters"] = 'ga:eventAction==download,ga:eventAction==internal,ga:eventAction==outbound'
             args["dimensions"] = "ga:eventLabel"
             args["metrics"] = "ga:totalEvents"
+            args["sort"] = "-ga:totalEvents"
             args["alt"] = "json"
 
             results = self._get_json(args)
@@ -523,8 +525,8 @@ class DownloadAnalytics(object):
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
-                         dimensions="ga:socialNetwork,ga:referralPath",
-                         max_results=10000)
+                         dimensions="ga:socialNetwork,ga:referralPath")
+            args['max-results'] = 10000
             args['start-date'] = start_date
             args['end-date'] = end_date
 
@@ -552,8 +554,8 @@ class DownloadAnalytics(object):
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
-                         dimensions="ga:operatingSystem,ga:operatingSystemVersion",
-                         max_results=10000)
+                         dimensions="ga:operatingSystem,ga:operatingSystemVersion")
+            args['max-results'] = 10000
             args['start-date'] = start_date
             args['end-date'] = end_date
 
@@ -588,9 +590,9 @@ class DownloadAnalytics(object):
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
-                         dimensions="ga:browser,ga:browserVersion",
-                         max_results=10000)
+                         dimensions="ga:browser,ga:browserVersion")
 
+            args['max-results'] = 10000
             args['start-date'] = start_date
             args['end-date'] = end_date
 
@@ -649,8 +651,9 @@ class DownloadAnalytics(object):
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
-                         dimensions="ga:mobileDeviceBranding, ga:mobileDeviceInfo",
-                         max_results=10000)
+                         dimensions="ga:mobileDeviceBranding, ga:mobileDeviceInfo")
+
+            args['max-results'] = 10000
             args['start-date'] = start_date
             args['end-date'] = end_date
 
