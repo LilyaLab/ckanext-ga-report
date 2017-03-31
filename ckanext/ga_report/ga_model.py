@@ -5,6 +5,7 @@ from sqlalchemy import Table, Column, MetaData, ForeignKey
 from sqlalchemy import types
 from sqlalchemy.sql import select, or_, func
 from sqlalchemy.orm import mapper, relation
+from sqlalchemy import func, or_
 
 import ckan.model as model
 import ckan.model.group as group
