@@ -329,7 +329,7 @@ class DownloadAnalytics(object):
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
 
-            args["metrics"] = "ga:pageviewsPerVisit,ga:avgTimeOnSite,ga:percentNewVisits,ga:visits,ga:users"
+            args["metrics"] = "ga:pageviewsPerSession,ga:avgTimeOnPage,ga:percentNewSessions,ga:sessions,ga:users"
             args["alt"] = "json"
 
             results = self._get_json(args)
