@@ -35,8 +35,8 @@
             <div id="chart_{{id}}" class="rickshaw_chart"></div>
             <script type="text/javascript">
                 $(function() {
-                var items = {{items_json}};
-                CKAN.GA_Reports.render_rickshaw('{{id}}', items, '{{mode}}', '{{colorscheme}}');
+                    var items = {{ items_json|safe }};
+                    CKAN.GA_Reports.render_rickshaw('{{id}}', items, '{{mode}}', '{{colorscheme}}');
                 });
             </script>
         </div>
