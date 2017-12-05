@@ -11,7 +11,7 @@ CKAN.Templates.resourceUpload = ' \
     <input type="file" name="file" /> \
     <br /> \
     <div class="fileinfo"></div> \
-    <input id="upload" name="add-resource-upload" type="submit" class="btn btn-primary" value="'+CKAN.Strings.upload+'" /> \
+    <input id="upload" name="add-resource-upload" type="submit" class="btn btn-primary" value="'+_('Upload')+'" /> \
   </form> \
   <div class="alert alert-block" style="display: none;"></div> \
 </div>';
@@ -26,8 +26,8 @@ CKAN.Templates.resourceEntry = ' \
     </a>\
   </li>';
 
-var youCanUseMarkdownString = CKAN.Strings.youCanUseMarkdown.replace('%a', '<a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">').replace('%b', '</a>');
-var datesAreInISOString = CKAN.Strings.datesAreInISO.replace('%a', '<a href="http://en.wikipedia.org/wiki/ISO_8601#Calendar_dates" target="_blank">').replace('%b', '</a>').replace('%c', '<strong>').replace('%d', '</strong>');
+var youCanUseMarkdownString = 'You can use %aMarkdown formatting%b here.'.replace('%a', '<a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">').replace('%b', '</a>');
+var datesAreInISOString = ('Dates are in %aISO Format%b &mdash; eg. %c2012-12-25%d or %c2010-05-31T14:30%d.').replace('%a', '<a href="http://en.wikipedia.org/wiki/ISO_8601#Calendar_dates" target="_blank">').replace('%b', '</a>').replace('%c', '<strong>').replace('%d', '</strong>');
 
 // TODO it would be nice to unify this with the markdown editor specified in helpers.py
 CKAN.Templates.resourceDetails = ' \
@@ -36,18 +36,18 @@ CKAN.Templates.resourceDetails = ' \
       <div class="alert alert-error resource-errors"></div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.name+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Name')+'</label> \
       <div class="controls" property="rdf:value"> \
         <input class="js-resource-edit-name" name="resources__{{num}}__name" type="text" value="{{resource.name}}" class="long" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.description+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+ _('Description')+'</label> \
       <div class="controls"> \
         <div class="markdown-editor"> \
           <ul class="button-row"> \
-            <li><button class="btn js-markdown-edit depressed">'+CKAN.Strings.edit+'</button></li> \
-            <li><button class="btn js-markdown-preview">'+CKAN.Strings.preview+'</button></li> \
+            <li><button class="btn js-markdown-edit depressed">'+_('Edit')+'</button></li> \
+            <li><button class="btn js-markdown-preview">'+_('Preview')+'</button></li> \
           </ul> \
           <div> \
             <textarea class="js-resource-edit-description markdown-input" name="resources__{{num}}__description">{{resource.description}}</textarea> \
@@ -58,7 +58,7 @@ CKAN.Templates.resourceDetails = ' \
       </div> \
     </div> \
     <div class="control-group {% if resource.url_error %} error{% endif %}"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.url+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Url')+'</label> \
       <div class="controls"> \
         {% if resource.resource_type=="file.upload" %} \
           {{resource.url}} \
@@ -70,14 +70,14 @@ CKAN.Templates.resourceDetails = ' \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.format + '\
+      <label for="" class="control-label" property="rdfs:label">'+_('Format') + '\
           &nbsp;&nbsp;<img class="js-resource-icon inline-icon resource-icon" src="{{resource_icon}}" /> </label>\
       <div class="controls"> \
-        <input name="resources__{{num}}__format" type="text" value="{{resource.format}}" class="long js-resource-edit-format autocomplete-format" placeholder="'+CKAN.Strings.resourceFormatPlaceholder+'" /> \
+        <input name="resources__{{num}}__format" type="text" value="{{resource.format}}" class="long js-resource-edit-format autocomplete-format" placeholder="'+_('e.g. csv, html, xls, rdf, ...')+'" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.resourceType+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Resource Type')+'</label> \
       <div class="controls"> \
         {% if resource.resource_type=="file.upload" %} \
           '+CKAN.Strings.dataFileUploaded+' \
