@@ -80,7 +80,7 @@ CKAN.Templates.resourceDetails = ' \
       <label for="" class="control-label" property="rdfs:label">'+_('Resource Type')+'</label> \
       <div class="controls"> \
         {% if resource.resource_type=="file.upload" %} \
-          '+CKAN.Strings.dataFileUploaded+' \
+          '+_('Data File (Uploaded)')+' \
           <input name="resources__{{num}}__resource_type" type="hidden" value="{{resource.resource_type}}" /> \
         {% endif %} \
         {% if resource.resource_type!="file.upload" %} \
@@ -93,66 +93,66 @@ CKAN.Templates.resourceDetails = ' \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.lastModified+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Last Modified')+'</label> \
       <div class="controls"> \
         <input class="input-small" name="resources__{{num}}__last_modified" type="text" value="{{resource.last_modified}}" /> \
         <div class="hint">'+datesAreInISOString+'</div> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.sizeBracketsBytes+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Size (Bytes)')+'</label> \
       <div class="controls"> \
         <input name="resources__{{num}}__size" type="text" value="{{resource.size}}" class="long" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.mimetype+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Mimetype')+'</label> \
       <div class="controls"> \
         <input name="resources__{{num}}__mimetype" type="text" value="{{resource.mimetype}}" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.mimetypeInner+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Mimetype (Inner)')+'</label> \
       <div class="controls"> \
         <input name="resources__{{num}}__mimetype_inner" type="text" value="{{resource.mimetype_inner}}" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.id+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('ID')+'</label> \
       <div class="controls"> \
         <input type="text" disabled="disabled" value="{{resource.id}}" class="disabled" /> \
         <input name="resources__{{num}}__id" type="hidden" value="{{resource.id}}" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.hash+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Hash')+'</label> \
       <div class="controls"> \
-        <input type="text" disabled="disabled" class="disabled" value="{{resource.hash or "'+CKAN.Strings.unknown+'"}}"/> \
+        <input type="text" disabled="disabled" class="disabled" value="{{resource.hash or "'+_('Unknown')+'"}}"/> \
         <input name="resources__{{num}}__hash" type="hidden" value="{{resource.hash}}" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label for="" class="control-label" property="rdfs:label">'+CKAN.Strings.created+'</label> \
+      <label for="" class="control-label" property="rdfs:label">'+_('Created')+'</label> \
       <div class="controls"> \
         <input type="text" disabled="disabled" value="{{resource.created}}" class="disabled" /> \
       </div> \
     </div> \
     <div class="control-group"> \
-      <label class="control-label">'+CKAN.Strings.extraFields+' \
-        <button class="btn btn-small add-resource-extra">'+CKAN.Strings.addExtraField+'</button>\
+      <label class="control-label">'+_('Extra Fields')+' \
+        <button class="btn btn-small add-resource-extra">'+_('Add Extra Field')+'</button>\
       </label>\
       <div class="controls"> \
         <div class="dynamic-extras"> \
         </div> \
       </div> \
-    <button class="btn btn-danger resource-edit-delete js-resource-edit-delete">'+CKAN.Strings.deleteResource+'</button>\
+    <button class="btn btn-danger resource-edit-delete js-resource-edit-delete">'+_('Delete Resource')+'</button>\
   </div> \
 ';
 
 CKAN.Templates.resourceExtra = ' \
   <div class="dynamic-extra"> \
   <button class="btn btn-danger remove-resource-extra">X</button>\
-  <input type="text" placeholder="'+CKAN.Strings.key+'" class="extra-key" value="{{key}}" /> \
-  <input type="text" placeholder="'+CKAN.Strings.value+'" class="extra-value" value="{{value}}" /> \
+  <input type="text" placeholder="'+_('Key')+'" class="extra-key" value="{{key}}" /> \
+  <input type="text" placeholder="'+_('Value')+'" class="extra-value" value="{{value}}" /> \
   </div> \
   ';
