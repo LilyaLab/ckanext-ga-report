@@ -59,7 +59,7 @@
                         <li><a href="#languages" data-hash="languages" data-toggle="tab"><span class="reader-offleft">Tab </span>Languages</a></li>
                         <li><a href="#country" data-hash="country" data-toggle="tab"><span class="reader-offleft">Tab </span>Country</a></li>
                     </ul>
-                    <div class="tab-content active">
+                    <div class="tab-content">
                         <div class="tab-pane active" id="totals">
                             <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                                 <label class="ga-reports-heading" for="total-select">Show stats table for:</label>
@@ -73,11 +73,11 @@
                                 </tr>
                                 {% for name, value, graph in c.global_totals %}
                                     <tr>
-                                        <td>{% if name != 'Unique visitors' or c.month %}{{name}}{% else %}"Average monthly unique visitors"{% endif %}</td>
+                                        <td>{% if name != 'Unique visitors' or c.month %}{{name}}{% else %}Average monthly unique visitors{% endif %}</td>
                                         <td class="td-numeric">{{value}}</td>
                                         <td class="sparkline-cell">
                                             <span class="sparkline" sparkTooltips="{{h.join_x(graph)}}">
-                                                {{ h.join_y(graph) }}
+                                                {{h.join_y(graph)}}
                                             </span>
                                         </td>
                                     </tr>
@@ -169,14 +169,12 @@
             </div>
         </div>
     </div>
-    
-    {% block optional_footer %}
-        <script type="text/javascript">
-            $(function() {
-                CKAN.GA_Reports.bind_sparklines();
-                CKAN.GA_Reports.bind_sidebar();
-                CKAN.GA_Reports.bind_month_selector();
-            });
-        </script>
-    {% endblock %}
+
+    <script type="text/javascript">
+        $(function(){
+            CKAN.GA_Reports.bind_sparklines();
+            CKAN.GA_Reports.bind_sidebar();
+            CKAN.GA_Reports.bind_month_selector();
+        });
+    </script>
 {% endblock %}

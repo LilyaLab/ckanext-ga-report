@@ -201,9 +201,11 @@
                 <div class="row">
                     <div class="span9 content-outer">
                         <div id="content">
-                            {% block content %}
-                                <p>Master content template placeholder &hellip; please replace me.</p>
-                            {% endblock %}
+                            <div>
+                                {% block content %}
+                                    <p>Master content template placeholder &hellip; please replace me.</p>
+                                {% endblock %}
+                            </div>
                         </div> <!-- /content -->
                     </div>
                     <div class="span3 sidebar-outer">
@@ -294,10 +296,9 @@
                     });
                 {% endif %}
             </script>
+            {% block optional_footer %}
+            {% endblock %}
         </div> <!-- #scripts -->
-
-        {% block optional_footer %}
-        {% endblock %}        
         {{h.literal(g.template_footer_end)}}
     </body>
 </html>
